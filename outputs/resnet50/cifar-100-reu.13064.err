@@ -1,0 +1,43 @@
+Please run `conda env list` to see a list of all available environments. Use
+`source activate <env>` to activate the environment '<env>'. 
+Please run `conda env list` to see a list of all available environments. Use
+`source activate <env>` to activate the environment '<env>'. 
+
+Currently Loaded Modules:
+  1) anaconda/anaconda3   3) ic/ic-2019.1.144
+  2) cuda/cuda-9.0        4) openmpi/openmpi-4.0.0-ic-2019.1.144
+
+ 
+
+Using TensorFlow backend.
+WARNING:tensorflow:From /apps/anaconda/anaconda3/envs/deeplearning-gpu/lib/python3.7/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+2019-05-16 12:59:02.945496: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2019-05-16 12:59:02.949954: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100000000 Hz
+2019-05-16 12:59:02.950142: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x5632b1179300 executing computations on platform Host. Devices:
+2019-05-16 12:59:02.950182: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+2019-05-16 12:59:03.880293: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x5632b123bc60 executing computations on platform CUDA. Devices:
+2019-05-16 12:59:03.880386: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): Tesla V100-PCIE-16GB, Compute Capability 7.0
+2019-05-16 12:59:03.880879: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1433] Found device 0 with properties: 
+name: Tesla V100-PCIE-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.38
+pciBusID: 0000:3b:00.0
+totalMemory: 15.75GiB freeMemory: 15.44GiB
+2019-05-16 12:59:03.880906: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1512] Adding visible gpu devices: 0
+2019-05-16 12:59:03.881783: I tensorflow/core/common_runtime/gpu/gpu_device.cc:984] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-05-16 12:59:03.881800: I tensorflow/core/common_runtime/gpu/gpu_device.cc:990]      0 
+2019-05-16 12:59:03.881809: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1003] 0:   N 
+2019-05-16 12:59:03.882176: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 15022 MB memory) -> physical GPU (device: 0, name: Tesla V100-PCIE-16GB, pci bus id: 0000:3b:00.0, compute capability: 7.0)
+/apps/anaconda/anaconda3/envs/deeplearning-gpu/lib/python3.7/site-packages/keras_applications/resnet50.py:265: UserWarning: The output shape of `ResNet50(include_top=False)` has been changed since Keras 2.2.0.
+  warnings.warn('The output shape of `ResNet50(include_top=False)` '
+WARNING:tensorflow:From /apps/anaconda/anaconda3/envs/deeplearning-gpu/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:3445: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /apps/anaconda/anaconda3/envs/deeplearning-gpu/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+2019-05-16 12:59:35.861342: I tensorflow/stream_executor/dso_loader.cc:152] successfully opened CUDA library libcublas.so.10.0 locally
+Traceback (most recent call last):
+  File "Assignment0.py", line 155, in <module>
+    score = model.evaluate(x_test, y_test, show_accuracy=True, verbose=1)
+TypeError: evaluate() got an unexpected keyword argument 'show_accuracy'

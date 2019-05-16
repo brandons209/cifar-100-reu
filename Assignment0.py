@@ -2,7 +2,7 @@ from keras.layers.core import Dropout, Flatten, Dense, Activation
 from keras.layers import Conv2D, MaxPooling2D
 
 from keras.applications.inception_v3 import InceptionV3
-from keras_applications.resnet50 import ResNet50
+from keras.applications.resnet50 import ResNet50
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 
 from keras.utils import np_utils
@@ -37,7 +37,7 @@ if model_name == "inceptionv3":
 elif model_name == "inceptionresnetv2":
     imported_model = InceptionResNetV2(weights='imagenet', include_top=False, input_shape=(75, 75, 3))
     resize_flag = (75, 75)
-elif model_name == "ResNet50":
+elif model_name == "resnet50":
     imported_model = ResNet50(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
     resize_flag = None
 
@@ -152,7 +152,7 @@ early = EarlyStopping(patience=5, verbose=1)
 model.fit(x_train, y_train, batch_size=batch_size,
                     callbacks=[checkpoint, tensorboard, early],
                     epochs=epochs, verbose=1, validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, show_accuracy=True, verbose=1)
+score = model.evaluate(x_test, y_test,  verbose=1)
 
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
@@ -165,7 +165,7 @@ Z_train = np_utils.to_categorical(z_train, num_classes)
 Z_test = np_utils.to_categorical(z_test, num_classes)
 
 model.fit(x_train, Z_train, batch_size=batch_size, nb_epoch=epochs, verbose=1, validation_data=(x_test, Z_test))
-score = model.evaluate(x_test, Z_test, show_accuracy=True, verbose=0)
+score = model.evaluate(x_test, Z_test, verbose=1)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 """
