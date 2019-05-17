@@ -17,7 +17,7 @@ from torch.utils.data import DataLoader
 # tensorboardX
 from tensorboardX import SummaryWriter
 
-from tqdm import tqdm
+#from tqdm import tqdm
 import os
 
 data_dir = "./data"
@@ -67,11 +67,11 @@ opt = optim.Adam(model.parameters())
 # Training phase
 model.train()
 print_step = len(train_loader) // 50
-train_loss = 0
-correct = 0
-total = 0
 print("Training Starting...")
 for e in range(epochs):
+    train_loss = 0
+    correct = 0
+    total = 0
     for i, data in enumerate(train_loader):
         inputs, targets = data
         inputs, targets = inputs.to(device), targets.to(device)
@@ -93,7 +93,7 @@ for e in range(epochs):
         if i % print_step == 0:
             print("Epoch [{} / {}], Batch [{} / {}]: loss: {:.4f}, acc: {:.2f}".format(e+1, epochs, i+1, batch_size, train_loss/(i+1), (correct / total) * 100.0))
 
-    print("Epoch [{} / {}]: loss: {:.4f}, acc: {:.2f}".format(e+1, epochs, train_loss/(batch_size), (correct / total) * 100.0))
+    print("Epoch [{} / {}]: loss: {:.4f}, acc: {:.2f}".format(e+1, epochs, train_loss/(len(train_loader)), (correct / total) * 100.0))
 
 
 # Testing Phase
@@ -114,4 +114,4 @@ for i, data in test_loader:
     correct += predicted.eq(targets).sum().item()
 
 
-print("Testing Stats: loss: {:.4f}, acc: {:.2f}".format(test_loss/(test_set), (correct / total) * 100.0))
+print("Testing Stats: loss: {:.4f}, acc: {:.2f}".format(test_loss/len(test_loader), (correct / total) * 100.0))
