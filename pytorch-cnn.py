@@ -83,11 +83,11 @@ def test(epoch):
         correct += predicted.eq(targets).sum().item()
 
     if epoch == -1:
-        print("Test Results: loss: {:.4f}, acc: {:.2f}%".format(epoch + 1, test_loss/len(test_loader), (correct / total) * 100.0))
+        print("Test Results: loss: {:.4f}, acc: {:.2f}%".format(test_loss/len(test_loader), (correct / total) * 100.0))
     else:
         print("Epoch [{}] Test: loss: {:.4f}, acc: {:.2f}%".format(epoch + 1, test_loss/len(test_loader), (correct / total) * 100.0))
 
-        return test_loss
+        return test_loss/len(test_loader)
 
 
 # Training phase
