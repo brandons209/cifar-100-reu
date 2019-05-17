@@ -46,10 +46,11 @@ class VGG(nn.Module):
 
 
 class Custom_Model(nn.Module):
-    def __init__(self, num_classes, num_blocks):
+    def __init__(self, num_classes, num_blocks, img_dim):
         super(Custom_Model, self).__init__()
         self.num_classes = num_classes
         self.num_blocks = num_blocks
+        self.img_dim = img_dim
         self.features, out_channels = self.build_blocks()
         self.classifier = self.build_classifier(out_channels)
 
@@ -69,23 +70,23 @@ class Custom_Model(nn.Module):
 
     def build_blocks(self):
         layers = []
-        input_channels = 3
+        c, h, _ = self.img_dim
+        input_channels = c
         out_channels = 32
         for i in range(self.num_blocks):
-            padding = (((out_channels - 1) * 2) - input_channels + 2) // 2
+            padding = (((h - 1) * 2) - h + 2) // 2
             layers.append(nn.Conv2d(input_channels, out_channels, kernel_size=2, stride=2, padding=padding))
             layers.append(nn.ReLU(inplace=True))
             input_channels = out_channels
-            padding = (((out_channels - 1) * 2) - input_channels + 2) // 2
-            layers.append(nn.Conv2d(input_channels, out_channels, kernel_size=2, stride=2, padding=padding))
-            nn.ReLU(inplace=True)
-            layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
 
-            out_channels *= 2
+            layers.append(nn.Conv2d(input_channels, out_channels, kernel_size=2, stride=2, padding=padding))
+            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+            h = h // 2
+
+            if i+1 != self.num_blocks:
+                out_channels *= 2
 
         layers.append(nn.AvgPool2d(kernel_size=out_channels))
 
         return nn.Sequential(*layers), out_channels
-
-from torchsummary import summary
-summary(Custom_Model(100, 6), (3, 32, 32))

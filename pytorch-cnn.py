@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 from torchsummary import summary
 
 # model and dataset
-from models import VGG
+from models import VGG, Custom_Model
 from torchvision.datasets import CIFAR100
 from torch.utils.data import DataLoader
 
@@ -52,7 +52,8 @@ print("Image size: {}\n".format(img_dim))
 
 print("Loading model...")
 
-model = VGG('VGG19', num_classes)
+#model = VGG('VGG19', num_classes)
+model = Custom_Model(num_classes, 4, img_dim)
 model.to(device)
 summary(model, img_dim)
 
