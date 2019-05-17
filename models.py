@@ -39,7 +39,7 @@ class VGG(nn.Module):
                            nn.BatchNorm2d(x),
                            nn.ReLU(inplace=True)]
                 in_channels = x
-        layers += [nn.AvgPool2d(kernel_size=1, stride=1)]
+        #layers += [nn.AvgPool2d(kernel_size=1, stride=1)]
         print('%s Model Successfully Built \n' % self.vgg_name)
 
         return nn.Sequential(*layers)
