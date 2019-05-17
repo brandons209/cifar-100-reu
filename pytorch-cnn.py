@@ -44,14 +44,17 @@ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=True, num_work
 test_iter = iter(test_loader)
 images, _ = test_iter.next()
 images = images[0]
+img_dim = tuple(images.size())
 print("Dataset stats:\n")
 print("Number of training images: {}, testing: {}".format(len(train_set), len(test_set)))
-print("Image size: {}".format(images.size()))
+print("Image size: {}".format(img_dim))
 
 print("Loading model...")
 
 model = VGG('VGG19', num_classes)
+summary(model, img_dim)
 model.to(device)
+
 
 if device == 'cuda':
     model = nn.DataParallel(model)
