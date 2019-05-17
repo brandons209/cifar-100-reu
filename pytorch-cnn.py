@@ -91,11 +91,11 @@ def test(epoch):
 
 
 # Training phase
-model.train()
 print_step = len(train_loader) // 50
 best_loss = 0
 print("Training Starting...")
 for e in range(epochs):
+    model.train()
     train_loss = 0
     correct = 0
     total = 0
