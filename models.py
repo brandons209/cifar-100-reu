@@ -63,7 +63,7 @@ class Custom_Model(nn.Module):
         return out
 
     def build_classifier(self, out_channels):
-        layers = [nn.Linear(out_channels, 2048), nn.ReLU(inplace=True), nn.Dropout(p=0.3, inplace=True)]
+        layers = [nn.Linear(out_channels, 2048), nn.ReLU(inplace=True), nn.Dropout(p=0.3)]
         layers.append(nn.Linear(2048, self.num_classes))
 
         return nn.Sequential(*layers)
