@@ -47,13 +47,13 @@ images = images[0]
 img_dim = tuple(images.size())
 print("Dataset stats:\n")
 print("Number of training images: {}, testing: {}".format(len(train_set), len(test_set)))
-print("Image size: {}".format(img_dim))
+print("Image size: {}\n".format(img_dim))
 
 print("Loading model...")
 
 model = VGG('VGG19', num_classes)
-summary(model, img_dim)
 model.to(device)
+summary(model, img_dim)
 
 
 if device == 'cuda':
