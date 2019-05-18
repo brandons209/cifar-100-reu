@@ -76,6 +76,11 @@ if resize_flag:
     x_train = resize_data(x_train, resize_flag)
     x_test = resize_data(x_test, resize_flag)
 
+# normalize scalar values [0, 255] to values between [0, 1]
+# need to cast float32 to integers, which are type uint8
+x_train = x_train.astype('float32') / 255 # element wise division
+x_test = x_test.astype('float32') / 255
+
 print(x_train.shape[0])
 print(x_test.shape[0])
 

@@ -1,4 +1,3 @@
-'''VGG11/13/16/19 in Pytorch.'''
 import torch
 import torch.nn as nn
 
@@ -10,9 +9,31 @@ cfg = {
     'VGG19': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
       }
 
+def get_padding(output_dim, input_dim, kernel_size, stride):
+    """
+    Calculates padding given in output and input dim, and parameters of the convolutional layer
+
+    Arguments should all be integers. Use this function to calculate padding for 1 dimesion at a time.
+    Output dimensions should be the same or bigger than input dimensions
+
+    Returns None if invalid arguments were passed, otherwise returns an int or tuple that represents the padding.
+    """
+
+    padding = (((output_dim - 1) * stride) - input_dim + kernel_size) // 2
+
+    if padding < 0:
+        return None
+    else:
+        return padding
 
 class VGG(nn.Module):
     def __init__(self, vgg_name, num_classes):
+        """
+        Builds a VGG model.
+        Arguments:
+            vgg_name (string): Should be VGG11, VGG13, VGG16, or VGG19
+            num_classes (int): number of classes in data.
+        """
 
         super(VGG, self).__init__()
         self.vgg_name = vgg_name
@@ -44,9 +65,15 @@ class VGG(nn.Module):
 
         return nn.Sequential(*layers)
 
-
 class Custom_Model(nn.Module):
     def __init__(self, num_classes, num_blocks, img_dim):
+        """
+        Builds a custom model for CIFAR classification.
+        Arguments:
+            num_class (int): number of classes data has.
+            num_blocks (int): number of convolutional/pooling blocks to create.
+            img_dim (tuple): (c, h, w) dimensions of input data
+        """
         super(Custom_Model, self).__init__()
         self.num_classes = num_classes
         self.num_blocks = num_blocks
@@ -56,13 +83,14 @@ class Custom_Model(nn.Module):
 
     def forward(self, x):
         out = self.features(x)
-        # 1d vector in channel dimensions, need to move that to the width dimension
+        # 1d vector in channel dimensions, need to move that to a 1d vector (array)
         out = out.view(out.size(0), -1)
         out = self.classifier(out)
 
         return out
 
     def build_classifier(self, out_channels):
+        # creates a 2048 layer with 0.3 dropout, then the output layer
         layers = [nn.Linear(out_channels, 2048), nn.ReLU(inplace=True), nn.Dropout(p=0.3)]
         layers.append(nn.Linear(2048, self.num_classes))
 
@@ -73,8 +101,10 @@ class Custom_Model(nn.Module):
         c, h, _ = self.img_dim
         input_channels = c
         out_channels = 32
+        # starts block at 32 filters, doubles with each block.
         for i in range(self.num_blocks):
-            padding = (((h - 1) * 2) - h + 2) // 2
+            #calculate padding
+            padding = get_padding(h, h, 2, 2)
             layers.append(nn.Conv2d(input_channels, out_channels, kernel_size=2, stride=2, padding=padding))
             layers.append(nn.ReLU(inplace=True))
             input_channels = out_channels
