@@ -1,0 +1,9 @@
+Please run `conda env list` to see a list of all available environments. Use
+`source activate <env>` to activate the environment '<env>'. 
+
+Currently Loaded Modules:
+  1) anaconda/anaconda3   3) ic/ic-2019.1.144
+  2) cuda/cuda-9.0        4) openmpi/openmpi-4.0.0-ic-2019.1.144
+
+ 
+

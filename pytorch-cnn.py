@@ -19,6 +19,7 @@ from tensorboardX import SummaryWriter
 
 #from tqdm import tqdm
 import os
+import time
 
 data_dir = "./data"
 checkpoint_path = "weights/pytorch_best_weights.pt"
@@ -60,6 +61,7 @@ summary(model, img_dim)
 
 if device == 'cuda':
     model = nn.DataParallel(model)
+    # helps with runtime of model, use if you have a constant batch size
     cudnn.benchmark = True
 
 # define optimizer and loss
@@ -88,12 +90,13 @@ def test(epoch):
     else:
         print("Epoch [{}] Test: loss: {:.4f}, acc: {:.2f}%".format(epoch + 1, test_loss/len(test_loader), (correct / total) * 100.0))
 
-        return test_loss/len(test_loader)
+        return test_loss/len(test_loader), (correct / total) * 100.0
 
 
 # Training phase
 print_step = len(train_loader) // 50
 best_loss = 0
+writer = SummaryWriter('tensorboard_logs/run_{}'.format(time.strftime("%a_%b_%d_%Y_%H:%M", time.localtime())))
 print("Training Starting...")
 for e in range(epochs):
     model.train()
@@ -113,17 +116,16 @@ for e in range(epochs):
         loss.backward()
         opt.step()
 
-        train_loss += loss.item()
+        train_loss += loss.item() # .item() extracts the raw loss value from the tensor object
         _, predicted = outputs.max(dim=1)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
-
         if i % print_step == 0:
             print("Epoch [{} / {}], Batch [{} / {}]: loss: {:.4f}, acc: {:.2f}%".format(e+1, epochs, i+1, len(train_loader), train_loss/(i+1), (correct / total) * 100.0))
 
     print("Epoch [{} / {}]: loss: {:.4f}, acc: {:.2f}%".format(e+1, epochs, train_loss/(len(train_loader)), (correct / total) * 100.0))
 
-    val_loss = test(e)
+    val_loss, val_acc = test(e)
     if e == 0:
         best_loss = val_loss
     elif val_loss < best_loss: # model improved
@@ -131,6 +133,11 @@ for e in range(epochs):
         state = {'net': model.state_dict(), 'loss': val_loss, 'epoch': e}
         torch.save(state, checkpoint_path)
         best_loss = val_loss
+
+    writer.add_scalar('loss', train_loss/(len(train_loader)), e)
+    writer.add_scalar('acc', (correct / total) * 100.0, e)
+    writer.add_scalar('val_loss', val_loss, e)
+    writer.add_scalar('val_acc', val_acc, e)
 
 # Testing Phase
 test(-1)
