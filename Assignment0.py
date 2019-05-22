@@ -12,6 +12,7 @@ from keras.models import Sequential, Model
 from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping
 from keras.preprocessing.image import ImageDataGenerator
 
+from load_data import load_subsets
 
 import argparse
 from time import time
@@ -42,22 +43,15 @@ elif model_name == "resnet50":
     resize_flag = None
 
 (x_train, y_train), (x_test, y_test) = cifar100.load_data(label_mode='fine')
-
-# print shape of data while model is building
-print("{1} train samples, {2} channel{0}, {3}x{4}".format("" if x_train.shape[1] == 1 else "s", *x_train.shape))
-print("{1}  test samples, {2} channel{0}, {3}x{4}".format("" if x_test.shape[1] == 1 else "s", *x_test.shape))
+#x_train, y_train = load_subsets(x_train, y_train)
 
 # input image dimensions
 _, img_channels, img_rows, img_cols = x_train.shape
 
 print('x_train shape:', x_train.shape)
+print('y_train shape:', y_train.shape)
 print(x_train.shape[0], 'train samples')
 print(x_test.shape[0], 'test samples')
-
-
-print('y_train shape:', y_train.shape)
-print(y_train.shape[0], 'train samples')
-print(y_test.shape[0], 'test samples')
 
 # convert class vectors to binary class matrices
 y_train = np_utils.to_categorical(y_train, num_classes)
