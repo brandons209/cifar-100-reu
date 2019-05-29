@@ -21,10 +21,7 @@ def get_padding(output_dim, input_dim, kernel_size, stride):
 
     padding = (((output_dim - 1) * stride) - input_dim + kernel_size) // 2
 
-    if padding < 0:
-        return None
-    else:
-        return padding
+    return max(padding, 0)
 
 class VGG(nn.Module):
     def __init__(self, vgg_name, num_classes):
